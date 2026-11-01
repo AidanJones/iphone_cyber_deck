@@ -113,6 +113,58 @@ def device_body(phone=False):
     body=box((W-w)/2,D-T-C-d,F,w,d,t)
     return mirror_y(body) if phone else body
 
+def render_preview(meshes, stem):
+    (ROOT/stem).parent.mkdir(parents=True,exist_ok=True)
+    # Orthographic preview of the actual exported solids, sorted back to front.
+    view=np.array([[0.85,0.52,0],[0.26,-0.43,-0.86],[0.45,-0.73,0.50]])
+    polygons=[]
+    all_points=[]
+    for mesh,color in meshes:
+        points=mesh.vertices @ view.T
+        all_points.extend(points[:,:2])
+        for face,normal in zip(mesh.faces,mesh.face_normals):
+            tri=points[face]
+            shade=0.55+0.45*max(0,float(normal @ np.array([-0.3,-0.4,0.866])))
+            shaded='#'+''.join(f'{int(int(color[i:i+2],16)*shade):02x}' for i in (1,3,5))
+            polygons.append((tri[:,2].mean(),tri,shaded))
+    low=np.min(all_points,axis=0)-8
+    high=np.max(all_points,axis=0)+8
+    svg=[f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{low[0]} {low[1]} {high[0]-low[0]} {high[1]-low[1]}">']
+    svg.append(f'<rect x="{low[0]}" y="{low[1]}" width="{high[0]-low[0]}" height="{high[1]-low[1]}" fill="#f2f5f7"/>')
+    for _,tri,color in sorted(polygons,key=lambda p:p[0]):
+        coords=' '.join(f'{x:.3f},{y:.3f}' for x,y in tri[:,:2])
+        svg.append(f'<polygon points="{coords}" fill="{color}" stroke="#22313a" stroke-width="0.08"/>')
+    svg.append('</svg>')
+    (ROOT/f'{stem}.svg').write_text('\n'.join(svg))
+    scale=1400/max(high-low)
+    size=np.ceil((high-low)*scale).astype(int)
+    pixels=np.full((size[1],size[0],3),245,dtype=np.uint8)
+    depth=np.full((size[1],size[0]),-np.inf)
+    for _,tri,color in sorted(polygons,key=lambda p:p[0]):
+        zz=tri[:,2]
+        tri=(tri[:,:2]-low)*scale
+        left,top=np.maximum(np.floor(tri.min(axis=0)).astype(int),0)
+        right,bottom=np.minimum(np.ceil(tri.max(axis=0)).astype(int),size-1)
+        xx,yy=np.meshgrid(np.arange(left,right+1),np.arange(top,bottom+1))
+        signs=[]
+        for a,b in zip(tri,np.roll(tri,-1,axis=0)):
+            signs.append((xx-a[0])*(b[1]-a[1])-(yy-a[1])*(b[0]-a[0]))
+        mask=(np.min(signs,axis=0)>=0)|(np.max(signs,axis=0)<=0)
+        denom=signs[0][0,0]+signs[1][0,0]+signs[2][0,0]
+        if abs(denom)<1e-9:
+            continue
+        z=(signs[1]*zz[0]+signs[2]*zz[1]+signs[0]*zz[2])/denom
+        current_depth=depth[top:bottom+1,left:right+1]
+        mask &= z>current_depth
+        current_depth[mask]=z[mask]
+        rgb=[int(color[i:i+2],16) for i in (1,3,5)]
+        pixels[top:bottom+1,left:right+1][mask]=rgb
+    def chunk(kind,data):
+        return struct.pack('!I',len(data))+kind+data+struct.pack('!I',zlib.crc32(kind+data))
+    raw=b''.join(b'\x00'+row.tobytes() for row in pixels)
+    png=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('!2I5B',*size,8,2,0,0,0))+chunk(b'IDAT',zlib.compress(raw))+chunk(b'IEND',b'')
+    (ROOT/f'{stem}.png').write_bytes(png)
+
 def main():
     base, lid = tray(), tray(True)
     report = {"assumption":"UNCONFIRMED Rii K06, 151 x 59 x 11 mm", "tray_heights_mm":{"keyboard":HK,"phone":HP},"closed_printed_envelope_mm":[W,AY+P["hinge_radius"],HK+HP],"camera_projection_beyond_frame_mm":max(0,P["camera_allowance"]-F),"parts":{}}
@@ -158,55 +210,10 @@ def main():
     scene.add_geometry(base,node_name="keyboard_tray")
     scene.add_geometry(opened,node_name="phone_tray")
     scene.export(str(ROOT/"assembly.glb"))
-    # Orthographic preview of the actual exported solids, sorted back to front.
-    view=np.array([[0.85,0.52,0],[0.26,-0.43,-0.86],[0.45,-0.73,0.50]])
-    polygons=[]
-    all_points=[]
-    for mesh,color in [(base,'#41555f'),(opened,'#3c96a0')]:
-        points=mesh.vertices @ view.T
-        all_points.extend(points[:,:2])
-        for face,normal in zip(mesh.faces,mesh.face_normals):
-            tri=points[face]
-            shade=0.55+0.45*max(0,float(normal @ np.array([-0.3,-0.4,0.866])))
-            shaded='#'+''.join(f'{int(int(color[i:i+2],16)*shade):02x}' for i in (1,3,5))
-            polygons.append((tri[:,2].mean(),tri,shaded))
-    low=np.min(all_points,axis=0)-8
-    high=np.max(all_points,axis=0)+8
-    svg=[f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{low[0]} {low[1]} {high[0]-low[0]} {high[1]-low[1]}">']
-    svg.append(f'<rect x="{low[0]}" y="{low[1]}" width="{high[0]-low[0]}" height="{high[1]-low[1]}" fill="#f2f5f7"/>')
-    for _,tri,color in sorted(polygons,key=lambda p:p[0]):
-        coords=' '.join(f'{x:.3f},{y:.3f}' for x,y in tri[:,:2])
-        svg.append(f'<polygon points="{coords}" fill="{color}" stroke="#22313a" stroke-width="0.08"/>')
-    svg.append('</svg>')
-    (ROOT/'preview.svg').write_text('\n'.join(svg))
-    scale=800/max(high-low)
-    size=np.ceil((high-low)*scale).astype(int)
-    pixels=np.full((size[1],size[0],3),245,dtype=np.uint8)
-    depth=np.full((size[1],size[0]),-np.inf)
-    for _,tri,color in sorted(polygons,key=lambda p:p[0]):
-        zz=tri[:,2]
-        tri=(tri[:,:2]-low)*scale
-        left,top=np.maximum(np.floor(tri.min(axis=0)).astype(int),0)
-        right,bottom=np.minimum(np.ceil(tri.max(axis=0)).astype(int),size-1)
-        xx,yy=np.meshgrid(np.arange(left,right+1),np.arange(top,bottom+1))
-        signs=[]
-        for a,b in zip(tri,np.roll(tri,-1,axis=0)):
-            signs.append((xx-a[0])*(b[1]-a[1])-(yy-a[1])*(b[0]-a[0]))
-        mask=(np.min(signs,axis=0)>=0)|(np.max(signs,axis=0)<=0)
-        denom=signs[0][0,0]+signs[1][0,0]+signs[2][0,0]
-        if abs(denom)<1e-9:
-            continue
-        z=(signs[1]*zz[0]+signs[2]*zz[1]+signs[0]*zz[2])/denom
-        current_depth=depth[top:bottom+1,left:right+1]
-        mask &= z>current_depth
-        current_depth[mask]=z[mask]
-        rgb=[int(color[i:i+2],16) for i in (1,3,5)]
-        pixels[top:bottom+1,left:right+1][mask]=rgb
-    def chunk(kind,data):
-        return struct.pack('!I',len(data))+kind+data+struct.pack('!I',zlib.crc32(kind+data))
-    raw=b''.join(b'\x00'+row.tobytes() for row in pixels)
-    png=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('!2I5B',*size,8,2,0,0,0))+chunk(b'IDAT',zlib.compress(raw))+chunk(b'IEND',b'')
-    (ROOT/'preview.png').write_bytes(png)
+    render_preview([(base,'#41555f'),(opened,'#3c96a0')], 'docs/minimal-open')
+    render_preview([(base,'#41555f'),(pose(lid,0),'#3c96a0')], 'docs/minimal-closed')
+    (ROOT/'preview.png').write_bytes((ROOT/'docs/minimal-open.png').read_bytes())
+    (ROOT/'preview.svg').write_text((ROOT/'docs/minimal-open.svg').read_text())
     (ROOT/"validation.json").write_text(json.dumps(report,indent=2)+"\n")
     print(json.dumps(report,indent=2))
 

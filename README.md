@@ -20,7 +20,13 @@ the model, and its short link could not be resolved. These STLs assume a **Rii K
 151 × 59 × 11 mm**, not the wider i4/i8. Confirm the label and measure the actual
 keyboard, including its highest keys, before printing the trays.
 
-![Actual CAD geometry, open at 110 degrees](preview.png)
+![Minimal frame with compact hinge and camera opening, open at 110 degrees](docs/minimal-open.png)
+
+![Minimal frame folded closed, showing its thin profile and open back](docs/minimal-closed.png)
+
+Renders show the current printable geometry without devices. The closed printed
+envelope is 155 × 82.3 × 22.8 mm; the installed camera bump projects beyond it.
+Both views regenerate with `uv run generate.py`.
 
 ## Print files
 

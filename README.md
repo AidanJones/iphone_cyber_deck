@@ -1,5 +1,18 @@
 # iPhone 16e clamshell cyberdeck
 
+**Current design: matching-size halves with hexagonal mesh backs and a camera opening.**
+
+| Latest file | Preview | Download |
+| --- | --- | --- |
+| Open render | [View image](docs/hex-mesh-open.png) | [PNG](https://raw.githubusercontent.com/AidanJones/iphone_cyber_deck/main/docs/hex-mesh-open.png) |
+| Closed render | [View image](docs/hex-mesh-closed.png) | [PNG](https://raw.githubusercontent.com/AidanJones/iphone_cyber_deck/main/docs/hex-mesh-closed.png) |
+| Keyboard half | [3D model](print/keyboard_tray.stl) | [STL](https://raw.githubusercontent.com/AidanJones/iphone_cyber_deck/main/print/keyboard_tray.stl) |
+| iPhone half | [3D model](print/phone_tray.stl) | [STL](https://raw.githubusercontent.com/AidanJones/iphone_cyber_deck/main/print/phone_tray.stl) |
+| Open assembly | [GLB file](assembly.glb) | [GLB](https://raw.githubusercontent.com/AidanJones/iphone_cyber_deck/main/assembly.glb) |
+
+The links above track the latest files on `main`. Both STL files include the
+hexagonal mesh; the image previews below show those same generated models.
+
 Printable prototype: landscape iPhone above a Rii keyboard, with the screen and
 keys facing each other when closed. Two rigid trays, an interleaved pin hinge,
 and removable adhesive retention. The minimal version measures **155 × 82.3 ×
@@ -21,9 +34,9 @@ the model, and its short link could not be resolved. These STLs assume a **Rii K
 151 × 59 × 11 mm**, not the wider i4/i8. Confirm the label and measure the actual
 keyboard, including its highest keys, before printing the trays.
 
-![Matching hexagonal mesh frames with compact hinge and camera opening, open at 110 degrees](docs/minimal-open.png)
+![Matching hexagonal mesh frames with compact hinge and camera opening, open at 110 degrees](docs/hex-mesh-open.png)
 
-![Hexagonal mesh case folded closed with matching front and side edges](docs/minimal-closed.png)
+![Hexagonal mesh case folded closed with matching front and side edges](docs/hex-mesh-closed.png)
 
 Renders show the current printable geometry without devices. The closed printed
 envelope is 155 × 82.3 × 22.8 mm; the installed camera bump projects beyond it.

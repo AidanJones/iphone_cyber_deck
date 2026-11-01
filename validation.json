@@ -1,0 +1,101 @@
+{
+  "assumption": "UNCONFIRMED Rii K06, 151 x 59 x 11 mm",
+  "outer_tray_mm": [
+    157.0,
+    77.5,
+    14.9
+  ],
+  "closed_envelope_mm": [
+    157.0,
+    101.4,
+    29.8
+  ],
+  "parts": {
+    "keyboard_tray": {
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          157.0,
+          101.4,
+          18.9
+        ]
+      ],
+      "volume_mm3": 71527.3,
+      "watertight": true,
+      "solid_count": 1
+    },
+    "phone_tray": {
+      "bounds_mm": [
+        [
+          0.0,
+          -23.9,
+          0.0
+        ],
+        [
+          157.0,
+          77.5,
+          18.9
+        ]
+      ],
+      "volume_mm3": 85284.2,
+      "watertight": true,
+      "solid_count": 1
+    },
+    "keyboard_fit_gauge": {
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          157.0,
+          65.0,
+          3.0
+        ]
+      ],
+      "volume_mm3": 3127.7,
+      "watertight": true,
+      "solid_count": 1
+    },
+    "phone_fit_gauge": {
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          152.7,
+          77.5,
+          3.0
+        ]
+      ],
+      "volume_mm3": 3245.8,
+      "watertight": true,
+      "solid_count": 1
+    },
+    "hinge_bore_gauge": {
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          16.0,
+          8.6,
+          18.9
+        ]
+      ],
+      "volume_mm3": 2455.8,
+      "watertight": true,
+      "solid_count": 1
+    }
+  },
+  "hinge_sweep_collisions": []
+}

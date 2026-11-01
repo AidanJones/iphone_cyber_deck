@@ -1,0 +1,15 @@
+{
+  "keyboard_width": 151.0,
+  "keyboard_depth": 59.0,
+  "keyboard_thickness": 11.0,
+  "phone_width": 146.7,
+  "phone_depth": 71.5,
+  "phone_thickness": 7.8,
+  "clearance_per_side": 0.6,
+  "wall": 2.4,
+  "floor": 2.4,
+  "camera_allowance": 3.0,
+  "face_recess": 1.5,
+  "hinge_bore": 3.4,
+  "hinge_gap": 0.5
+}

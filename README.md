@@ -2,7 +2,18 @@
 
 Printable prototype: landscape iPhone above a Rii keyboard, with the screen and
 keys facing each other when closed. Two rigid trays, an interleaved pin hinge,
-and removable adhesive retention. Approximately **157 × 101.4 × 29.8 mm closed**.
+and removable adhesive retention. The minimal version measures **155 × 82.3 ×
+22.8 mm closed**, excluding the phone's camera bump.
+
+Compared with the first committed design, it is 7 mm thinner, 19.1 mm shallower,
+and uses about 86% less solid mesh volume. It has 1.6 mm side walls, 1.2 mm back
+rails, large open back panels and 6.4 mm diameter hinge barrels. Each half follows
+its device's size: the keyboard half is 12.5 mm shorter than the phone half, so
+the closed front edges do not meet. This is a light mounting frame rather than a
+sealed protective enclosure.
+
+See the [reference investigation](references/README.md) for the other makers'
+designs, downloaded reference photographs, access limitations and comparison.
 
 **Keyboard fit is provisional.** The original Amazon description does not identify
 the model, and its short link could not be resolved. These STLs assume a **Rii K06,
@@ -18,42 +29,57 @@ keyboard, including its highest keys, before printing the trays.
 - [Keyboard footprint gauge](print/keyboard_fit_gauge.stl)
 - [Phone footprint gauge](print/phone_fit_gauge.stl)
 - [Hinge bore gauge](print/hinge_bore_gauge.stl)
+- [Actual hinge print coupon](print/hinge_print_coupon.stl)
 - [3D assembly preview](assembly.glb) — reference only, do not slice as a print plate.
 
 ## Printing and assembly
 
 1. Print the three gauges first. The device should fit inside its gauge without
    force; these check the bounding rectangle, not corner contours or thickness.
-   Check a 3 mm rod passes through the hinge gauge. Adjust clearance if needed.
+   Check a 2 mm rod passes through the hinge gauge. Adjust clearance if needed.
+   The hinge print coupon reproduces a short section of the actual rounded
+   knuckle and its attachment, for testing support removal before the full print.
 2. Print one of each tray with the broad outer back on the bed, pockets up, at
    100% scale in millimetres. Auto-arrange the phone tray (its Y coordinates start
-   below zero). Each part fits a 157 × 102 mm bed area before brim.
+   below zero). Auto-arrange both parts; each fits a 155 × 83 mm bed area before brim.
 3. Suggested starting settings: PETG, 0.4 mm nozzle, 0.2 mm layers, four walls,
    five top/bottom layers, 20% infill. PLA is suitable for checking the fit.
-   The flat-bottom hinge blocks need no external support; the 3.4 mm horizontal
-   bores require a short bridge. Inspect the slicer preview and test the gauge.
-4. Dry-fit the devices. The phone is bare, with its camera end toward the relieved
-   36 mm end of the pocket. The seat has 3.2 mm of camera clearance above the
-   bottom skin. Check that the camera clears and the phone rests on its body.
-   Broad side windows provide button access; end windows provide charging access.
+   Enable build-plate supports beneath the rounded hinge undersides and their
+   short webs. Use support painting if automatic supports enter the 2.4 mm bores;
+   the bores should bridge without internal supports. Keep supports off the
+   device-facing seats. Inspect the slicer preview and test the coupon.
+4. Dry-fit the devices. The phone is bare, with its camera end toward the smaller
+   end window. A 36 × 63.5 mm through-opening exposes the camera end, including
+   space for the flash in either landscape orientation. Its generous coverage
+   avoids assuming exact lens coordinates; verify the camera and flash are
+   unobstructed on your phone. Check the phone rests on its body.
+   The bump protrudes through the back instead of raising the entire phone.
+   With the provisional 3 mm bump allowance, it projects 1.8 mm past the printed
+   frame, making the estimated loaded thickness 24.6 mm. Measure your actual bump.
+   The front long edge and both short ends have access windows. The hinge-side
+   wall stays intact to carry the hinge; controls on that edge may require lifting
+   the device out. Check button and cable access before fixing adhesive pads.
    Connector, button and camera positions have not been measured on hardware.
 5. Secure each device using thin removable adhesive pads on its back, away from
    the camera. The pockets have **no snap lips**: adhesive is required to retain
-   the phone when the lid is upright. The nominal faces sit 1.5 mm below each
-   rim, giving a 3 mm face-to-face gap closed. Pad thickness reduces this gap;
-   keep it below 0.5 mm per device and verify clearance before closing.
-6. Interleave the five knuckles and insert a smooth **3 mm × approximately 150 mm
-   metal rod**. The knuckles span X=6.25 to 150.75 mm; a centred 150 mm rod remains
+   the phone when the lid is upright. Use the perimeter rails and central ribs;
+   keep pads clear of the camera window. The nominal faces sit 0.8 mm below each
+   rim, giving a 1.6 mm face-to-face gap closed. Pad thickness reduces this gap;
+   keep it below 0.3 mm per device and allow extra depth for a screen protector.
+   Verify clearance before closing.
+6. Interleave the five knuckles and insert a smooth **2 mm × approximately 146 mm
+   metal rod**. The knuckles span X=6.25 to 148.75 mm; a centred 146 mm rod remains
    inside the overall width. Retain both ends with small adhesive collars or tape
    stops after insertion, clear of the moving seams. Deburr the rod and bores.
 7. Close slowly without forcing. Use an elastic band around the closed case for
    transport. The hinge is freely moving: hold or prop the screen in use. There
    is no friction mechanism, opening stop, integral latch or tabletop stability
-   claim. Remove the phone for rear-camera photography.
+   claim. The rear camera is accessible through the opening while installed;
+   check for clipping or flash reflections before use.
 
-The relatively broad hinge spine is deliberate: flat-bottom blocks are simple to
-print and leave clearance through the opening sweep. This is a first prototype,
-not a physically tested protective case. Check retention over a soft surface.
+This remains an unprinted prototype. Check retention over a soft surface. The
+open frame leaves the back and camera exposed and will flex more than a solid
+shell; printing and hardware checks are needed before carrying the devices in it.
 
 ## Adjust and regenerate with uv
 
@@ -71,10 +97,12 @@ Phone width/depth refer to its landscape bounding rectangle. Changing dimensions
 regenerates both tray sizes and their shared hinge.
 
 The generator verifies each STL is a watertight, positive-volume connected solid
-and checks tray-to-tray intersections at 5-degree increments from closed to 180
-degrees. Results are in [validation.json](validation.json). This samples rigid CAD
-clearance; it does not verify strength, real printing tolerances, device features,
-adhesive retention, or collisions between actual devices and charging cables.
+and checks tray-to-tray intersections at 1-degree increments from closed to 180
+degrees. A second sweep includes rectangular phone and keyboard body envelopes.
+Results are in [validation.json](validation.json). These are sampled rigid CAD
+checks; they exclude actual rounded contours, camera geometry, cables, adhesive,
+protectors, printing tolerances, strength and retention. The preview uses actual
+mesh geometry; it is not a photograph of a printed assembly.
 
 ## Dimensions and existing designs
 

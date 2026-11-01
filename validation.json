@@ -1,47 +1,47 @@
 {
   "assumption": "UNCONFIRMED Rii K06, 151 x 59 x 11 mm",
-  "outer_tray_mm": [
-    157.0,
-    77.5,
-    14.9
+  "tray_heights_mm": {
+    "keyboard": 13.0,
+    "phone": 9.8
+  },
+  "closed_printed_envelope_mm": [
+    155.0,
+    82.3,
+    22.8
   ],
-  "closed_envelope_mm": [
-    157.0,
-    101.4,
-    29.8
-  ],
+  "camera_projection_beyond_frame_mm": 1.8,
   "parts": {
     "keyboard_tray": {
       "bounds_mm": [
         [
           0.0,
-          0.0,
+          12.5,
           0.0
         ],
         [
-          157.0,
-          101.4,
-          18.9
+          155.0,
+          82.3,
+          16.2
         ]
       ],
-      "volume_mm3": 71527.3,
+      "volume_mm3": 12073.1,
       "watertight": true,
       "solid_count": 1
     },
     "phone_tray": {
       "bounds_mm": [
         [
-          0.0,
-          -23.9,
+          2.15,
+          -6.8,
           0.0
         ],
         [
-          157.0,
-          77.5,
-          18.9
+          152.85,
+          75.5,
+          13.0
         ]
       ],
-      "volume_mm3": 85284.2,
+      "volume_mm3": 9833.9,
       "watertight": true,
       "solid_count": 1
     },
@@ -53,12 +53,12 @@
           0.0
         ],
         [
-          157.0,
-          65.0,
+          155.0,
+          63.0,
           3.0
         ]
       ],
-      "volume_mm3": 3127.7,
+      "volume_mm3": 2062.1,
       "watertight": true,
       "solid_count": 1
     },
@@ -70,12 +70,12 @@
           0.0
         ],
         [
-          152.7,
-          77.5,
+          150.7,
+          75.5,
           3.0
         ]
       ],
-      "volume_mm3": 3245.8,
+      "volume_mm3": 2140.8,
       "watertight": true,
       "solid_count": 1
     },
@@ -88,14 +88,34 @@
         ],
         [
           16.0,
-          8.6,
-          18.9
+          8.0,
+          8.0
         ]
       ],
-      "volume_mm3": 2455.8,
+      "volume_mm3": 951.8,
+      "watertight": true,
+      "solid_count": 1
+    },
+    "hinge_print_coupon": {
+      "bounds_mm": [
+        [
+          6.25,
+          73.5,
+          0.0
+        ],
+        [
+          22.25,
+          82.3,
+          16.2
+        ]
+      ],
+      "volume_mm3": 838.0,
       "watertight": true,
       "solid_count": 1
     }
   },
-  "hinge_sweep_collisions": []
+  "hinge_sweep_collisions": [],
+  "hinge_sweep_step_degrees": 1,
+  "total_printed_volume_mm3": 21907.0,
+  "device_body_sweep_collisions": []
 }

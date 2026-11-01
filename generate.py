@@ -33,17 +33,42 @@ def mirror_y(m):
     matrix[1,1], matrix[1,3] = -1, D
     return m.copy().apply_transform(matrix)
 
+def lattice_cuts(phone=False):
+    radius=P['mesh_hole_radius']
+    pitch_radius=radius+P['mesh_web_width']/np.sqrt(3)
+    edge=P['back_frame_width']
+    strip=P['mounting_strip_width']
+    cuts=[]
+    for column,cx in enumerate(np.arange(edge+radius,W-edge,1.5*pitch_radius)):
+        if cx+radius>W-edge:
+            continue
+        if any(abs(cx-rail)<radius+strip/2 for rail in [W/3,2*W/3]):
+            continue
+        for cy in np.arange(edge+radius+(column%2)*np.sqrt(3)*pitch_radius/2,D-edge,np.sqrt(3)*pitch_radius):
+            if cy+radius>D-edge:
+                continue
+            if phone:
+                camera_x=(W-P['phone_width']-2*C)/2+2
+                camera_y=D-T-P['phone_depth']-C+P['camera_opening_edge_margin']
+                camera_depth=P['phone_depth']-2*P['camera_opening_edge_margin']
+                if (cx+radius>camera_x-2 and cx-radius<camera_x+P['camera_opening_width']+2
+                    and cy+radius>camera_y-2 and cy-radius<camera_y+camera_depth+2):
+                    continue
+            hole=tm.creation.cylinder(radius=radius,height=F+2,sections=6)
+            hole.apply_translation([cx,cy,F/2])
+            cuts.append(hole)
+    return cuts
+
 def tray(phone=False):
     H = HP if phone else HK
     w, d, thick = (P[f"{'phone' if phone else 'keyboard'}_{k}"] for k in ("width", "depth", "thickness"))
-    outer_w,outer_d = w+2*(C+T),d+2*(C+T)
-    outer_x,outer_y = (W-outer_w)/2,D-outer_d
-    x, y = outer_x+T,outer_y+T
+    outer_w,outer_d = W,D
+    outer_x,outer_y = 0,0
+    x, y = (W-w-2*C)/2,D-T-d-2*C
     seat = H-P["face_recess"]-thick
     # Separate shell depths eliminate the raised phone seat.
     shell = subtract(box(outer_x,outer_y,0,outer_w,outer_d,H), [box(x,y,seat,w+2*C,d+2*C,H)])
-    cuts = []
-    frame = P["back_frame_width"]
+    cuts = lattice_cuts(phone)
     if phone:
         # Generous camera/flash window across the camera end, leaving a frame.
         # Broad coverage supports either landscape orientation without assuming
@@ -51,18 +76,17 @@ def tray(phone=False):
         margin = P["camera_opening_edge_margin"]
         cuts.append(box(x+2,y+C+margin,-1,
                         P["camera_opening_width"],d-2*margin,seat+1.01))
-        cuts.append(box(x+42,y+frame,-1,w+2*C-42-frame,d+2*C-2*frame,F+1.01))
     else:
-        # Two windows leave a perimeter and a central adhesive mounting rib.
-        rib = 5
-        for xx in [x+frame, x+(w+2*C+rib)/2]:
-            cuts.append(box(xx,y+frame,-1,(w+2*C)/2-frame-rib/2,d+2*C-2*frame,F+1.01))
+        # Hollow the spacer ahead of the shorter keyboard; retain a thin locator
+        # wall at its front edge and a matching outer perimeter for closure.
+        if y>2*T:
+            cuts.append(box(T,T,F,W-2*T,y-2*T,H))
     # Broad access windows avoid guessed button and connector coordinates.
     # Keep the hinge-side wall intact to anchor the small barrel webs.
     for yy in [outer_y-1]:
-        cuts.append(box(x+18,yy,seat+2,w+2*C-36,T+1,H))
+        cuts.append(box(x+18,yy,seat+2,w+2*C-36,y+1,H))
     for xx in [outer_x-1, x+w+2*C]:
-        cuts.append(box(xx,y+d/2-12,seat+1,T+1,24,H))
+        cuts.append(box(xx,y+d/2-12,seat+1,(W-w-2*C)/2+1,24,H))
     shell = subtract(shell,cuts)
     # Compact round knuckles at the closing plane; local supports under barrels.
     pitch = (W-12)/5
@@ -167,7 +191,10 @@ def render_preview(meshes, stem):
 
 def main():
     base, lid = tray(), tray(True)
+    closed=pose(lid,0)
+    assert np.allclose(base.bounds[:,:2],closed.bounds[:,:2],atol=1e-5), 'Closed outlines differ'
     report = {"assumption":"UNCONFIRMED Rii K06, 151 x 59 x 11 mm", "tray_heights_mm":{"keyboard":HK,"phone":HP},"closed_printed_envelope_mm":[W,AY+P["hinge_radius"],HK+HP],"camera_projection_beyond_frame_mm":max(0,P["camera_allowance"]-F),"parts":{}}
+    report['matching_closed_footprints']=True
     for name,m in [("keyboard_tray",base),("phone_tray",lid)]:
         report["parts"][name]=export(name,m)
     # Full footprint, shallow gauges: cheap check of the actual pocket dimensions.

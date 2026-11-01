@@ -16,5 +16,8 @@
   "hinge_radius": 3.2,
   "hinge_offset": 3.6,
   "back_frame_width": 6.0,
+  "mesh_hole_radius": 4.5,
+  "mesh_web_width": 1.2,
+  "mounting_strip_width": 5.0,
   "hinge_gap": 0.5
 }

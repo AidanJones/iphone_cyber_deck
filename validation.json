@@ -15,7 +15,7 @@
       "bounds_mm": [
         [
           0.0,
-          12.5,
+          0.0,
           0.0
         ],
         [
@@ -24,24 +24,24 @@
           16.2
         ]
       ],
-      "volume_mm3": 12073.1,
+      "volume_mm3": 17373.8,
       "watertight": true,
       "solid_count": 1
     },
     "phone_tray": {
       "bounds_mm": [
         [
-          2.15,
+          0.0,
           -6.8,
           0.0
         ],
         [
-          152.85,
+          155.0,
           75.5,
           13.0
         ]
       ],
-      "volume_mm3": 9833.9,
+      "volume_mm3": 15390.5,
       "watertight": true,
       "solid_count": 1
     },
@@ -114,8 +114,9 @@
       "solid_count": 1
     }
   },
+  "matching_closed_footprints": true,
   "hinge_sweep_collisions": [],
   "hinge_sweep_step_degrees": 1,
-  "total_printed_volume_mm3": 21907.0,
+  "total_printed_volume_mm3": 32764.3,
   "device_body_sweep_collisions": []
 }

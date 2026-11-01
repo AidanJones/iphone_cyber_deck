@@ -70,10 +70,10 @@ were not downloaded or measured.
 | Hinge | Tall rectangular blocks | 6.4 mm diameter round barrels |
 | Pin | 3 mm | 2 mm |
 | Phone seat | Raised for camera clearance | 1.2 mm frame with camera opening |
-| Back | Mostly solid | Perimeter rails and adhesive mounting ribs |
-| Keyboard footprint | Padded to phone depth | Sized to keyboard, aligned at hinge |
+| Back | Mostly solid | Hexagonal lattice with solid mounting strips |
+| Keyboard footprint | Padded to phone depth | Shared outer footprint, hollow spacer ahead of fitted pocket |
 | Support | Flat-bottom hinge | Local support beneath barrel undersides |
-| Solid mesh volume, both parts | 156,811.5 mm³ | 21,907.0 mm³ |
+| Solid mesh volume, both parts | 156,811.5 mm³ | See current validation.json (approximately 33,000 mm³) |
 
 The volume comparison uses the first committed version, before its camera
 opening, and the current generated solids. It is not a measured filament saving

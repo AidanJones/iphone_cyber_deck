@@ -6,11 +6,12 @@ and removable adhesive retention. The minimal version measures **155 × 82.3 ×
 22.8 mm closed**, excluding the phone's camera bump.
 
 Compared with the first committed design, it is 7 mm thinner, 19.1 mm shallower,
-and uses about 86% less solid mesh volume. It has 1.6 mm side walls, 1.2 mm back
-rails, large open back panels and 6.4 mm diameter hinge barrels. Each half follows
-its device's size: the keyboard half is 12.5 mm shorter than the phone half, so
-the closed front edges do not meet. This is a light mounting frame rather than a
-sealed protective enclosure.
+and uses about 79% less solid mesh volume. It has 1.6 mm perimeter walls, 1.2 mm
+back panels with a hexagonal lattice, solid mounting strips and 6.4 mm diameter
+hinge barrels. Both halves share the same 155 × 75.5 mm outer rectangle, so the
+front and side edges align when closed. The shorter keyboard has a hollow spacer
+and an internal locator wall to preserve its fit. This is a light mounting frame
+rather than a sealed protective enclosure.
 
 See the [reference investigation](references/README.md) for the other makers'
 designs, downloaded reference photographs, access limitations and comparison.
@@ -20,9 +21,9 @@ the model, and its short link could not be resolved. These STLs assume a **Rii K
 151 × 59 × 11 mm**, not the wider i4/i8. Confirm the label and measure the actual
 keyboard, including its highest keys, before printing the trays.
 
-![Minimal frame with compact hinge and camera opening, open at 110 degrees](docs/minimal-open.png)
+![Matching hexagonal mesh frames with compact hinge and camera opening, open at 110 degrees](docs/minimal-open.png)
 
-![Minimal frame folded closed, showing its thin profile and open back](docs/minimal-closed.png)
+![Hexagonal mesh case folded closed with matching front and side edges](docs/minimal-closed.png)
 
 Renders show the current printable geometry without devices. The closed printed
 envelope is 155 × 82.3 × 22.8 mm; the installed camera bump projects beyond it.
@@ -100,10 +101,12 @@ uv run generate.py
 source; it uses Manifold boolean operations and exports STL, GLB and previews.
 No OpenSCAD or proprietary CAD application is needed. Lengths are in millimetres.
 Phone width/depth refer to its landscape bounding rectangle. Changing dimensions
-regenerates both tray sizes and their shared hinge.
+regenerates both device pockets, their shared outer footprint and hinge. The
+hexagon radius and lattice web thickness are adjustable in `dimensions.json`;
+defaults are 4.5 mm and 1.2 mm. Solid 5 mm mounting strips remain under the devices.
 
 The generator verifies each STL is a watertight, positive-volume connected solid
-and checks tray-to-tray intersections at 1-degree increments from closed to 180
+and verifies that the closed halves have matching XY bounds. It checks tray-to-tray intersections at 1-degree increments from closed to 180
 degrees. A second sweep includes rectangular phone and keyboard body envelopes.
 Results are in [validation.json](validation.json). These are sampled rigid CAD
 checks; they exclude actual rounded contours, camera geometry, cables, adhesive,
